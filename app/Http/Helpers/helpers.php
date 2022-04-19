@@ -84,3 +84,31 @@ function tambah_nol_didepan($value, $threshold = null)
 {
     return sprintf("%0". $threshold . "s", $value);
 }
+
+function nama_level($nama_level)
+{
+    $nama_level = abs($nama_level);
+    $baca  = array('', 'Admin', 'Kasir');
+    $baca_level = '';
+
+    if ($nama_level == 1) { // 0 - 11
+        $baca_level = ' ' . $baca[$nama_level];
+    } elseif ($nama_level == 2 ) { // 12 - 19
+        $baca_level = ' ' . $baca[$nama_level];
+    }
+    return $baca_level;
+}
+
+function status($status)
+{
+    $status = abs($status);
+    $baca  = array('', 'Lunas', 'Belum Dibayar');
+    $baca_status = '';
+
+    if ($status == 1) { // 0 - 11
+        $baca_status = ' ' . $baca[$status];
+    } elseif ($status == 2 ) { // 12 - 19
+        $baca_status = ' ' . $baca[$status];
+    }
+    return $baca_status;
+}

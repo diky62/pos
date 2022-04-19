@@ -18,9 +18,6 @@ class CreateTransaksiTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->date('tanggal');
             $table->string('nama_pembeli');
-            $table->string('alamat');
-            $table->string('no_hp');
-            $table->string('total_item');
             $table->string('total_harga');
             $table->string('diskon');
             $table->string('total_bayar');

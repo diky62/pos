@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Pengeluaran
+    Daftar Barang Masuk
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Pengeluaran</li>
+    <li class="active">Daftar Barang Masuk</li>
 @endsection
 
 @section('content')
@@ -14,15 +14,15 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
-                <button onclick="addForm('{{ route('pengeluaran.store') }}')" class="btn btn-success "><i class="fa fa-plus-circle"></i> Tambah Pengeluaran</button>
+                <button onclick="addForm('{{ route('barang_masuk.store') }}')" class="btn btn-success "><i class="fa fa-plus-circle"></i> Tambah Barang Masuk</button>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered">
                     <thead>
                         <th width="5%">No</th>
-                        <th>Deskripsi Pengeluaran</th>
+                        <th>Nama Barang</th>
                         <th>Tanggal</th>
-                        <th>Nominal</th>
+                        <th>jumlah</th>
                         <th width="20%"><i class="fa fa-cog"></i></th>
 
                     </thead>
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-@includeIf('pengeluaran.form')
+@includeIf('barang_masuk.form')
 @endsection
 
 @push('scripts')
@@ -46,13 +46,13 @@
             serverSide: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('pengeluaran.data') }}',
+                url: '{{ route('barang_masuk.data') }}',
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'deskripsi'},
+                {data: 'nama_produk'},
                 {data: 'tanggal'},
-                {data: 'nominal'},
+                {data: 'jumlah'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
@@ -74,29 +74,28 @@
 
     function addForm(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Tambah Pengeluaran');
+        $('#modal-form .modal-title').text('Tambah Barang Masuk');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
         $('#modal-form [name=_method]').val('post');
-        $('#modal-form [name=deskripsi]').focus();
+        $('#modal-form [name=produk_id]').focus();
     }
 
     function editForm(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Edit Pengeluaran');
+        $('#modal-form .modal-title').text('Edit Barang MAsuk');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
         $('#modal-form [name=_method]').val('put');
-        $('#modal-form [name=deskripsi]').focus();
+        $('#modal-form [name=produk_id').focus();
 
         $.get(url)
             .done((response) => {
-                $('#modal-form [name=deskripsi]').val(response.deskripsi);
+                $('#modal-form [name=produk_id]').val(response.produk_id);
                 $('#modal-form [name=tanggal]').val(response.tanggal);
-                $('#modal-form [name=nominal]').val(response.nominal);
-                $('#modal-form [name=merek]').val(response.merek);
+                $('#modal-form [name=jumlah]').val(response.jumlah);
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');
@@ -109,7 +108,7 @@
         swal({
             type:"warning",
             title:"Apakah anda yakin ?",
-            text:"Akan Menghapus Data Pengeluaran",
+            text:"Akan Menghapus Data Barang Masuk",
             showCancelButton:true,
             cancelButtonColor:"#d33",
             confirmButtonText:"Ya",

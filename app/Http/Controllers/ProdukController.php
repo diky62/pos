@@ -28,10 +28,11 @@ class ProdukController extends Controller
      */
     public function data()
     {
+
         $produk = Produk::leftJoin('kategori', 'kategori.id', 'produk.kategori_id')
             ->select('produk.*', 'nama_kategori')
             // ->orderBy('kode_produk', 'asc')
-            ->get();
+            ->get()->sortBy('stok');;
         return datatables()
             ->of($produk)
             ->addIndexColumn()

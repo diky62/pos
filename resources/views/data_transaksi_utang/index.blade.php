@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Pengeluaran
+    Daftar Transaksi Utang
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Pengeluaran</li>
+    <li class="active">Daftar Transaksi Utang</li>
 @endsection
 
 @section('content')
@@ -14,15 +14,19 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
-                <button onclick="addForm('{{ route('pengeluaran.store') }}')" class="btn btn-success "><i class="fa fa-plus-circle"></i> Tambah Pengeluaran</button>
+                {{-- <button onclick="addForm('{{ route('pengeluaran.store') }}')" class="btn btn-success "><i class="fa fa-plus-circle"></i> Tambah Pengeluaran</button> --}}
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered">
+                <table class="table table-stiped table-bordered table-transaksi">
                     <thead>
                         <th width="5%">No</th>
-                        <th>Deskripsi Pengeluaran</th>
+                        <th>Nama Pembeli</th>
                         <th>Tanggal</th>
-                        <th>Nominal</th>
+                        <th>Nama Kasir</th>
+                        <th>Total Harga</th>
+                        <th>Diskon</th>
+                        <th>Total Bayar</th>
+                        <th>Status</th>
                         <th width="20%"><i class="fa fa-cog"></i></th>
 
                     </thead>
@@ -32,28 +36,48 @@
     </div>
 </div>
 
-@includeIf('pengeluaran.form')
+@includeIf('data_transaksi_utang.show')
+@includeIf('data_transaksi_utang.form')
 @endsection
 
 @push('scripts')
 <script>
-    let table;
+    let table, table1;
 
     $(function () {
-        table = $('.table').DataTable({
+        table = $('.table-transaksi').DataTable({
             responsive: true,
             processing: false,
             serverSide: true,
             autoWidth: false,
+            
             ajax: {
-                url: '{{ route('pengeluaran.data') }}',
+                url: '{{ route('data_transaksi_utang.data') }}',
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'deskripsi'},
+                {data: 'nama_pembeli'},
                 {data: 'tanggal'},
-                {data: 'nominal'},
+                {data: 'kasir'},
+                {data: 'total_harga'},
+                {data: 'diskon'},
+                {data: 'total_bayar'},
+                {data: 'status'},
                 {data: 'aksi', searchable: false, sortable: false},
+            ]
+        });
+        table1 = $('.table-detail').DataTable({
+            processing: false,
+            bSort: false,
+            dom: 'Brt',
+            columns: [
+                {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'kode_produk'},
+                {data: 'nama_produk'},
+                {data: 'harga_jual'},
+                {data: 'diskon'},
+                {data: 'jumlah'},
+                {data: 'subtotal'},
             ]
         });
 
@@ -74,29 +98,28 @@
 
     function addForm(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Tambah Pengeluaran');
+        $('#modal-form .modal-title').text('Tambah Produk');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
         $('#modal-form [name=_method]').val('post');
-        $('#modal-form [name=deskripsi]').focus();
-    }
+        $('#modal-form [name=nama_produk]').focus();
+    }   
 
     function editForm(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Edit Pengeluaran');
+        $('#modal-form .modal-title').text('Edit Transaksi Utang');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
         $('#modal-form [name=_method]').val('put');
-        $('#modal-form [name=deskripsi]').focus();
+        $('#modal-form [name=nama_pembeli]').focus();
 
         $.get(url)
             .done((response) => {
-                $('#modal-form [name=deskripsi]').val(response.deskripsi);
+                $('#modal-form [name=nama_pembeli]').val(response.nama_pembeli);
                 $('#modal-form [name=tanggal]').val(response.tanggal);
-                $('#modal-form [name=nominal]').val(response.nominal);
-                $('#modal-form [name=merek]').val(response.merek);
+                $('#modal-form [name=status]').val(response.status);
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');
@@ -104,12 +127,31 @@
             });
     }
 
+    function showDetail(url) {
+        $('#modal-detail').modal('show');
+
+        table1.ajax.url(url);
+        table1.ajax.reload();
+    }
+
+    // function addForm(url) {
+    //     $('#modal-form').modal('show');
+    //     $('#modal-form .modal-title').text('Tambah Pengeluaran');
+
+    //     $('#modal-form form')[0].reset();
+    //     $('#modal-form form').attr('action', url);
+    //     $('#modal-form [name=_method]').val('post');
+    //     $('#modal-form [name=deskripsi]').focus();
+    // }
+
+    
+
 
     function deleteData(url) {
         swal({
             type:"warning",
             title:"Apakah anda yakin ?",
-            text:"Akan Menghapus Data Pengeluaran",
+            text:"Akan Menghapus Data Transaksi Utang",
             showCancelButton:true,
             cancelButtonColor:"#d33",
             confirmButtonText:"Ya",

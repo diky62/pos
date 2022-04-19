@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Pengeluaran
+    Daftar Transaksi Tunai
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Pengeluaran</li>
+    <li class="active">Daftar Transaksi Tunai</li>
 @endsection
 
 @section('content')
@@ -14,15 +14,18 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
-                <button onclick="addForm('{{ route('pengeluaran.store') }}')" class="btn btn-success "><i class="fa fa-plus-circle"></i> Tambah Pengeluaran</button>
+                {{-- <button onclick="addForm('{{ route('pengeluaran.store') }}')" class="btn btn-success "><i class="fa fa-plus-circle"></i> Tambah Pengeluaran</button> --}}
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered">
+                <table class="table table-stiped table-bordered table-transaksi">
                     <thead>
                         <th width="5%">No</th>
-                        <th>Deskripsi Pengeluaran</th>
+                        <th>Nama Pembeli</th>
                         <th>Tanggal</th>
-                        <th>Nominal</th>
+                        <th>Nama Kasir</th>
+                        <th>Total Harga</th>
+                        <th>Diskon</th>
+                        <th>Total Bayar</th>
                         <th width="20%"><i class="fa fa-cog"></i></th>
 
                     </thead>
@@ -32,45 +35,56 @@
     </div>
 </div>
 
-@includeIf('pengeluaran.form')
+@includeIf('data_transaksi_tunai.show')
 @endsection
 
 @push('scripts')
 <script>
-    let table;
+    let table, table1;
 
     $(function () {
-        table = $('.table').DataTable({
+        table = $('.table-transaksi').DataTable({
             responsive: true,
             processing: false,
             serverSide: true,
             autoWidth: false,
+            
             ajax: {
-                url: '{{ route('pengeluaran.data') }}',
+                url: '{{ route('data_transaksi_tunai.data') }}',
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'deskripsi'},
+                {data: 'nama_pembeli'},
                 {data: 'tanggal'},
-                {data: 'nominal'},
+                {data: 'kasir'},
+                {data: 'total_harga'},
+                {data: 'diskon'},
+                {data: 'total_bayar'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
-
-        $('#modal-form').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
-                $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
-                    .done((response) => {
-                        $('#modal-form').modal('hide');
-                        table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        alert('Tidak dapat menyimpan data');
-                        return;
-                    });
-            }
-        });
+        table1 = $('.table-detail').DataTable({
+            processing: false,
+            bSort: false,
+            dom: 'Brt',
+            columns: [
+                {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'kode_produk'},
+                {data: 'nama_produk'},
+                {data: 'harga_jual'},
+                {data: 'diskon'},
+                {data: 'jumlah'},
+                {data: 'subtotal'},
+            ]
+        })
     });
+
+    function showDetail(url) {
+        $('#modal-detail').modal('show');
+
+        table1.ajax.url(url);
+        table1.ajax.reload();
+    }
 
     function addForm(url) {
         $('#modal-form').modal('show');
@@ -109,7 +123,7 @@
         swal({
             type:"warning",
             title:"Apakah anda yakin ?",
-            text:"Akan Menghapus Data Pengeluaran",
+            text:"Akan Menghapus Data Transaksi",
             showCancelButton:true,
             cancelButtonColor:"#d33",
             confirmButtonText:"Ya",

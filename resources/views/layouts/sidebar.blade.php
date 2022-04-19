@@ -3,7 +3,7 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar d-flex">
         <!-- Sidebar user panel -->
-        <div class="user-panel">
+        <div class="user-panel d-flex">
             <div class="pull-left image">
                 <img src="{{ url(auth()->user()->foto ?? '') }}" class="img-circle img-profil" alt="User Image">
             </div>
@@ -46,29 +46,29 @@
                 </a>
             </li>
             <li>
-                <a href="{{-- {{ route('pembelian.index') }} --}}">
+                <a href="{{ route('barang_masuk.index') }}">
                     <i class="fa fa-download"></i> <span>Barang Masuk</span>
                 </a>
             </li>
             <li>
-                <a href="{{-- {{ route('penjualan.index') }} --}}">
+                <a href="{{ route('transaksi.index') }}">
                     <i class="fa fa-upload"></i> <span>Transaksi Tunai</span>
                 </a>
             </li>
             <li>
-                <a href="{{-- {{ route('transaksi.index') }} --}}">
+                <a href="{{ route('transaksi_utang.index') }}">
                     <i class="fa fa-cart-arrow-down"></i> <span>Transaksi Utang</span>
                 </a>
             </li>
 
             <li class="header">DATA</li>
             <li>
-                <a href="{{-- {{ route('penjualan.index') }} --}}">
+                <a href="{{ route('data_transaksi_tunai.index') }}">
                     <i class="fa  fa-file-text"></i> <span>Data Transaksi Tunai</span>
                 </a>
             </li>
             <li>
-                <a href="{{-- {{ route('transaksi.index') }} --}}">
+                <a href="{{ route('data_transaksi_utang.index') }}">
                     <i class="fa  fa-file-text"></i> <span>Data Transaksi Utang</span>
                 </a>
             </li>
@@ -97,12 +97,12 @@
 
             <li class="header">SYSTEM</li>
             <li>
-                <a href="{{-- {{ route('user.index') }} --}}">
+                <a href="{{ route('user.index') }}">
                     <i class="fa fa-users"></i> <span>User</span>
                 </a>
             </li>
             <li>
-                <a href="{{-- {{ route("setting.index") }} --}}">
+                <a href="{{ route("setting.index") }}">
                     <i class="fa fa-cogs"></i> <span>Pengaturan</span>
                 </a>
             </li>

@@ -1,6 +1,6 @@
 <header class="main-header">
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="{{ route('dashboard') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         @php
             $words = explode(' ', $settings->nama_perusahaan);
@@ -42,7 +42,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="{{-- {{ route('user.profil') }} --}}" class="btn btn-default btn-flat">Profil</a>
+                                <a href="{{ route('user.profil') }}" class="btn btn-default btn-flat">Profil</a>
                             </div>
                             <div class="pull-right">
                                  {{-- <a href="{{ route('logout') }}" class="dropdown-item" onclick="logout()">

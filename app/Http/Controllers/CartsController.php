@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Settings;
+use App\Models\Carts;
 
-class SettingController extends Controller
+class CartsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return view('setting.index');
+        //
     }
 
     /**
@@ -33,9 +33,13 @@ class SettingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        if (request()->produk_id) {
+            Carts::create(request()->all());
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -44,9 +48,9 @@ class SettingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        return Settings::first();
+        //
     }
 
     /**
@@ -67,25 +71,11 @@ class SettingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Carts $cart)
     {
-        $setting = Settings::first();
-        $setting->nama_perusahaan = $request->nama_perusahaan;
-        $setting->telepon = $request->telepon;
-        $setting->alamat = $request->alamat;
-        $setting->tipe_nota = $request->tipe_nota;
+        $cart->update(request()->all());
 
-        if ($request->hasFile('path_logo')) {
-            $file = $request->file('path_logo');
-            $nama = 'logo-' . date('YmdHis') . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('/img'), $nama);
-
-            $setting->path_logo = "/img/$nama";
-        }
-
-        $setting->update();
-
-        return response()->json('Data berhasil disimpan', 200);
+        return redirect()->back();
     }
 
     /**
@@ -94,8 +84,10 @@ class SettingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Carts $cart)
     {
-        //
+        $cart->delete();
+
+        return redirect()->back();
     }
 }

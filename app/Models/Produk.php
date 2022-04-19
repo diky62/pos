@@ -23,5 +23,8 @@ class Produk extends Model
     public function transaksi_detail(){
         return $this->hasMany(TransaksiDetail::class);
     }
+    public function carts() {
+        return $this->hasOne(Carts::class);
+    }
     
 }

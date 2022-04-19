@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use App\Models\Kategori;
@@ -13,7 +11,7 @@ use App\Models\User;
 use App\Models\Transaksi;
 use App\Models\TransaksiDetail;
 
-class TransaksiController extends Controller
+class TransaksiUtangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,36 +27,7 @@ class TransaksiController extends Controller
         $user = auth()->user();
         // $total = sum(function ($item) { return $item->harga_jual_tunai * $item->carts->jumlah;
         // dd($date);
-        return view('transaksi.index', compact(['produk', 'itemCarts', 'user', 'date']));
-    }
-
-    public function data()
-    {
-        $produk = Produk::get();
-        return datatables()
-            ->of($produk)
-            ->addIndexColumn()
-            ->addColumn('kode_produk', function ($produk) {
-                return '<span class="label label-success">'. $produk->kode_produk .'</span>';
-            })
-            ->addColumn('harga_jual_tunai', function ($produk) {
-                return format_uang($produk->harga_jual_tunai);
-            })
-            ->addColumn('harga_jual_utang', function ($produk) {
-                return format_uang($produk->harga_jual_utang);
-            })
-            ->addColumn('stok', function ($produk) {
-                return format_uang($produk->stok);
-            })
-            ->addColumn('aksi', function ($produk) {
-                return '
-                <div class="group">
-                   <button type="button" onclick="pilihProduk('. $produk->kode_produk .')" class="btn btn-warning" data-dismiss="modal"><i class="fa fa-pencil"></i> Pilih</button>
-                </div>
-                ';
-            })
-            ->rawColumns(['aksi', 'kode_produk', 'select_all'])
-            ->make(true);
+        return view('transaksi_utang.index', compact(['produk', 'itemCarts', 'user', 'date']));
     }
 
     /**
@@ -79,7 +48,6 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        
         $transaksi = new Transaksi;
          // $transaksi->fill($request["transaksi"]);
         $transaksi->fill($request->all());
@@ -117,7 +85,7 @@ class TransaksiController extends Controller
         }
         
         
-        return redirect()->route('transaksi.selesai');
+        return redirect()->route('transaksi_utang.selesai');
     }
 
     /**
@@ -165,27 +133,11 @@ class TransaksiController extends Controller
         //
     }
 
-    public function loadForm($diskon = 0, $total = 0, $diterima = 0)
-    {
-        $bayar   = $total - ($diskon / 100 * $total);
-        $kembali = ($diterima != 0) ? $diterima - $bayar : 0;
-        $data    = [
-            'totalrp' => format_uang($total),
-            'bayar' => $bayar,
-            'bayarrp' => format_uang($bayar),
-            'terbilang' => ucwords(terbilang($bayar). ' Rupiah'),
-            'kembalirp' => format_uang($kembali),
-            'kembali_terbilang' => ucwords(terbilang($kembali). ' Rupiah'),
-        ];
-
-        return response()->json($data);
-    }
-
     public function selesai()
     {
         $setting = Settings::first();
 
-        return view('transaksi.selesai', compact('setting'));
+        return view('transaksi_utang.selesai', compact('setting'));
     }
 
     public function notaKecil()
@@ -201,7 +153,7 @@ class TransaksiController extends Controller
             ->where('transaksi_id', $transaksi_id)
             ->get();
         
-        return view('transaksi.nota_kecil', compact('setting', 'transaksi', 'detail'));
+        return view('transaksi_utang.nota_kecil', compact('setting', 'transaksi', 'detail'));
     }
 
     public function notaBesar()
@@ -215,7 +167,7 @@ class TransaksiController extends Controller
             ->where('id_penjualan', session('id_penjualan'))
             ->get();
 
-        $pdf = PDF::loadView('penjualan.nota_besar', compact('setting', 'penjualan', 'detail'));
+        $pdf = PDF::loadView('penjualan_utang.nota_besar', compact('setting', 'penjualan', 'detail'));
         $pdf->setPaper(0,0,609,440, 'potrait');
         return $pdf->stream('Transaksi-'. date('Y-m-d-his') .'.pdf');
     }

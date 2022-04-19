@@ -12,7 +12,12 @@
             @endif --}}
         <form method="post" action="{{ route('login') }}" role="login">
             @csrf
-            <img src="{{asset('assets/auth/images/logo.png')}}" class="img-responsive" alt="" />
+            <center>
+                <img src="{{ url($settings->path_logo) }}" height="100" {{-- class="img-responsive" --}} alt="" />
+               {{--  <h2>
+                    LOGIN {{ $settings->nama_perusahaan }}
+                </h2> --}}
+            </center>
 
             @error('email')
                 <div class="alert alert-danger">

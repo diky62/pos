@@ -192,22 +192,59 @@
     }
 
     function deleteSelected(url) {
-        if ($('input:checked').length > 1) {
-            if (confirm('Yakin ingin menghapus data terpilih?')) {
+        swal({
+            type:"warning",
+            title:"Apakah anda yakin ?",
+            text:"Akan Menghapus Data Produk Terpilih",
+            showCancelButton:true,
+            cancelButtonColor:"#d33",
+            confirmButtonText:"Ya",
+            confirmButtonColor:"#3085d6"
+        }).then(result=>{
+            if(result.value){
+                let access = {
+                 
+                    _method:"delete",
+                    _token:"{{ csrf_token() }}"
+                }
+
                 $.post(url, $('.form-produk').serialize())
-                    .done((response) => {
-                        table.ajax.reload();
+                .done(res=>{
+                    table.ajax.reload();
+                    swal({
+                        title:"Ok!",
+                        text:"Data berhasil dihaps!",
+                        type:"success"
                     })
-                    .fail((errors) => {
-                        alert('Tidak dapat menghapus data');
-                        return;
+                    .then(result=>{
+                        table.ajax.reload();
                     });
+                })
+                .fail(err=>{
+                     alert('Tidak dapat menghapus data');
+                    return;
+                });
             }
-        } else {
-            alert('Pilih data yang akan dihapus');
-            return;
-        }
+        });
     }
+
+    // function deleteSelected(url) {
+    //     if ($('input:checked').length > 1) {
+    //         if (confirm('Yakin ingin menghapus data terpilih?')) {
+    //             $.post(url, $('.form-produk').serialize())
+    //                 .done((response) => {
+    //                     table.ajax.reload();
+    //                 })
+    //                 .fail((errors) => {
+    //                     alert('Tidak dapat menghapus data');
+    //                     return;
+    //                 });
+    //         }
+    //     } else {
+    //         alert('Pilih data yang akan dihapus');
+    //         return;
+    //     }
+    // }
 
     function cetakBarcode(url) {
         if ($('input:checked').length < 1) {

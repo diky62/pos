@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/dist/css/skins/_all-skins.min.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('assets/admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+    <!-- css untuk select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -86,7 +88,8 @@
     <script src="{{ asset('assets/admin/dist/js/adminlte.min.js') }}"></script>
     <!-- Validator -->
     <script src="{{ asset('js/validator.min.js') }}"></script>
-
+    <!-- js untuk select2  -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         function preview(selector, temporaryFile, width = 200)  {
             $(selector).empty();
